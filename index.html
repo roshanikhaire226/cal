@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Colorful Calculator</title>
+<style>
+  body {
+    background: #282c34;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .calculator {
+    background: #1e2228;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ffff;
+    width: 320px;
+  }
+
+  #display {
+    background: #121619;
+    color: #00ffff;
+    font-size: 2rem;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+    user-select: none;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+  }
+
+  button {
+    padding: 20px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #fff;
+  }
+
+  button:hover {
+    filter: brightness(1.1);
+  }
+
+  .btn-number {
+    background: linear-gradient(45deg, #00bcd4, #009688);
+    box-shadow: 0 4px #00675b;
+  }
+
+  .btn-operator {
+    background: linear-gradient(45deg, #ff5722, #e64a19);
+    box-shadow: 0 4px #b23c17;
+  }
+
+  .btn-equal {
+    background: linear-gradient(45deg, #4caf50, #388e3c);
+    box-shadow: 0 4px #2e7d32;
+    grid-column: span 2;
+  }
+
+  .btn-clear {
+    background: linear-gradient(45deg, #f44336, #d32f2f);
+    box-shadow: 0 4px #9a1f1f;
+  }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+  <div id="display">0</div>
+  <div class="buttons">
+    <button class="btn-clear" onclick="clearDisplay()">C</button>
+    <button class="btn-operator" onclick="appendOperator('/')">÷</button>
+    <button class="btn-operator" onclick="appendOperator('*')">×</button>
+    <button class="btn-operator" onclick="appendOperator('-')">−</button>
+
+    <button class="btn-number" onclick="appendNumber('7')">7</button>
+    <button class="btn-number" onclick="appendNumber('8')">8</button>
+    <button class="btn-number" onclick="appendNumber('9')">9</button>
+    <button class="btn-operator" onclick="appendOperator('+')">+</button>
+
+    <button class="btn-number" onclick="appendNumber('4')">4</button>
+    <button class="btn-number" onclick="appendNumber('5')">5</button>
+    <button class="btn-number" onclick="appendNumber('6')">6</button>
+    <button class="btn-number" onclick="appendNumber('0')">0</button>
+
+    <button class="btn-number" onclick="appendNumber('1')">1</button>
+    <button class="btn-number" onclick="appendNumber('2')">2</button>
+    <button class="btn-number" onclick="appendNumber('3')">3</button>
+    <button class="btn-equal" onclick="calculateResult()">=</button>
+  </div>
+</div>
+
+<script>
+  let display = document.getElementById('display');
+  let currentInput = '';
+
+  function appendNumber(num) {
+    if (currentInput === '0') {
+      currentInput = num;
+    } else {
+      currentInput += num;
+    }
+    updateDisplay();
+  }
+
+  function appendOperator(op) {
+    if (currentInput === '') return; // prevent operator at start
+    let lastChar = currentInput.slice(-1);
+    if ('+-*/'.includes(lastChar)) {
+      // Replace the operator if last char is already an operator
+      currentInput = currentInput.slice(0, -1) + op;
+    } else {
+      currentInput += op;
+    }
+    updateDisplay();
+  }
+
+  function clearDisplay() {
+    currentInput = '';
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    display.textContent = currentInput || '0';
+  }
+
+  function calculateResult() {
+    try {
+      // Replace × and ÷ with * and / for eval
+      let expression = currentInput.replace(/×/g, '*').replace(/÷/g, '/');
+      let result = eval(expression);
+      currentInput = result.toString();
+      updateDisplay();
+    } catch {
+      display.textContent = 'Error';
+      currentInput = '';
+    }
+  }
+</script>
+
+</body>
+</html>
